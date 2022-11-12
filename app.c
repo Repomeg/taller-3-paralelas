@@ -1,44 +1,42 @@
-#include <omp.h>
+#include <omp.h> // Librería OpenMP
 #include <stdio.h>
 #include <stdlib.h>
-#define MAX_THREADS 8
-
-static long steps = 1000000000;
-double step;
 
 int main (int argc, const char *argv[]) {
+    
+    // Declaración de variables
+    int i,j; // Variables para los ciclos for
+    double x, pi, sum = 0.0;  // Variables para el cálculo de pi
+    double t1, t2, diff;  // Variables para el cálculo del tiempo de ejecución
+    static long nsteps = 1000000000; 
 
-    int i,j;
-    double x;
-    double pi, sum = 0.0;
-    double start, delta;
+    double step = 1.0/(double) nsteps;
 
-    step = 1.0/(double) steps;
+    int z= 8; // Se define el número máximos de hilos
+    //omp_set_num_threads(z); 
 
-    // Compute parallel compute times for 1-MAX_THREADS
-    for (j=1; j<= MAX_THREADS; j++) {
+    // Calculo del tiempo por cada uno de los hilos
+    for (j=1; j<= z; j++) {
+        printf(" Hilos %d: ", j); 
 
-        printf(" running on %d threads: ", j);
-
-        // This is the beginning of a single PI computation 
+        // Se inicia el valor de hilos correspondiente
         omp_set_num_threads(j);
 
         sum = 0.0;
-        double start = omp_get_wtime();
-
+        t1 = omp_get_wtime(); // Se obtiene el tiempo inicial
 
         #pragma omp parallel for reduction(+:sum) private(x)
-        for (i=0; i < steps; i++) {
+        for (i=0; i < nsteps; i++) {  // Se realiza el cálculo de pi
             x = (i+0.5)*step;
             sum += 4.0 / (1.0+x*x); 
         }
 
-        // Out of the parallel region, finialize computation
+        // Se finaliza la región paralela
         pi = step * sum;
-        delta = omp_get_wtime() - start;
-        printf("PI = %.16g computed in %.4g seconds\n", pi, delta);
+        
+        t2 = omp_get_wtime();  // Se obtiene el tiempo final
+        diff = t2 - t1;  // Se obtiene la diferencia de tiempo entre el final y el inicial
+        printf("PI = %.10g calculado en %.4g segundos\n", pi, diff);
 
     }
-    
-
 }
