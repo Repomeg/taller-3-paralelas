@@ -5,11 +5,10 @@
 int main (int argc, const char *argv[]) {
     
     // Declaración de variables
-    int i,j;
-    double x;
-    double pi, sum = 0.0;
-    double t1, t2, diff;
-    static long nsteps = 1000000000;
+    int i,j; // Variables para los ciclos for
+    double x, pi, sum = 0.0;  // Variables para el cálculo de pi
+    double t1, t2, diff;  // Variables para el cálculo del tiempo de ejecución
+    static long nsteps = 1000000000; 
 
     double step = 1.0/(double) nsteps;
     
@@ -19,7 +18,7 @@ int main (int argc, const char *argv[]) {
     for (j=1; j<= 4; j++) {
         printf(" Hilo %d: ", j);
 
-        // This is the beginning of a single PI computation 
+        // Se inicia el valor de hilos correspondiente
         omp_set_num_threads(j);
 
         sum = 0.0;
