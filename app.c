@@ -11,12 +11,13 @@ int main (int argc, const char *argv[]) {
     static long nsteps = 1000000000; 
 
     double step = 1.0/(double) nsteps;
-    
-    omp_set_num_threads(4); // Se define el número máximos de hilos
+
+    int z= 8; // Se define el número máximos de hilos
+    //omp_set_num_threads(z); 
 
     // Calculo del tiempo por cada uno de los hilos
-    for (j=1; j<= 4; j++) {
-        printf(" Hilo %d: ", j);
+    for (j=1; j<= z; j++) {
+        printf(" Hilos %d: ", j); 
 
         // Se inicia el valor de hilos correspondiente
         omp_set_num_threads(j);
